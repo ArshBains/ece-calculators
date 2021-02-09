@@ -63,15 +63,19 @@ def term_elimination(full_row1, full_row2):
 # create initial iterative consensus table in SOP from 
 # use '2' instead of '-'
 # '0' and '1' for corresponding vairable
-# ["term_name":, [representation] ,itereted, deleted]
+# ["term_name":, [representation] ,itereted]
 terms = [
-    ["A", [2, 1, 0, 0], False, False],
-    ["B", [1, 1, 2, 1], False, False],
-    ["C", [2, 1, 1, 0], False, False],
-    ["D", [2, 0, 1, 0], False, False],
+    ["A", [2, 1, 0, 0], False],
+    ["B", [1, 1, 2, 1], False],
+    ["C", [2, 1, 1, 0], False],
+    ["D", [2, 0, 1, 0], False],
 ]
 cycle = 1
 completed = False
+print(bcolors.OKGREEN+"LEGEND:\n1 -> x = x\n0 -> x = x'\n- -> no x"+bcolors.ENDC)
+print(bcolors.WARNING + "Initial terms:" + bcolors.ENDC)
+for term in terms:
+            print("{} -> [{}]".format(term[0], ", ".join(map(str, term[1])).replace("2","-")))
 
 while completed == False:
     last_index = len(terms)
@@ -87,13 +91,16 @@ while completed == False:
             new_row = term_generation(expression1, expression2)
             if new_row != None:
                 completed = False
-                terms.append(["{}{}".format(terms[index][0], terms[x][0]) ,new_row,False, False])
+                terms.append(["{}{}".format(terms[index][0], terms[x][0]) ,new_row,False])
                 # print(terms[index][0], terms[x][0])
             else: continue
+
         terms[index][2] = True      #set to true because we have iterated this row
         cycle = cycle+1
+
         for term in terms:
-            print("{} -> {}".format(term[0], term[1]))
+            print("{} -> [{}]".format(term[0], ", ".join(map(str, term[1])).replace("2","-")))
+
         rows_to_delete = []
         for comb in itertools.combinations(terms, 2):
             # print(comb[0], comb[1])
